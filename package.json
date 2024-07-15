@@ -1,0 +1,21 @@
+{
+  "name": "figa-gui-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1",
+    "sass": "^1.77.8"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
+  }
+}
