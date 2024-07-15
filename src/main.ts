@@ -6,9 +6,11 @@ const main = () => {
   const root = find("#app") as HTMLElement;
 
   Figa.initRouter(root, routes, {
-    animation: "fade",
-    transition: 400,
+    animation: "slide-right",
+    duration: 400,
   });
 };
 
 document.addEventListener("DOMContentLoaded", main);
+
+// to do: https://registry.npmjs.org/{package}

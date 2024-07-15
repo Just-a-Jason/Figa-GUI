@@ -32,18 +32,6 @@
     filter: drop-shadow(2px 4px 20px #675261);
   }
 
-  a {
-    text-decoration: none;
-    background-color: #4472d4;
-    transition: 0.2s;
-    border-radius: 10px;
-    padding: 10px;
-    color: #fff;
-    &:hover {
-      background-color: #90a7da;
-    }
-  }
-
   .wrapper {
     display: flex;
     align-items: center;

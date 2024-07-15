@@ -5,6 +5,7 @@ import ReactiveButton from "../Components/ReactiveButton";
 import FigaScreen from "../Figa/Components/FigaScreen";
 import { Link } from "../Figa/Router";
 import "./Home.scss";
+import ReenderStat from "../Components/RenderStat";
 
 export default class Home extends FigaScreen {
   public constructor() {
@@ -12,6 +13,8 @@ export default class Home extends FigaScreen {
   }
 
   protected template(): FigaUITemplate<FigaComponentProps> {
+    const start = performance.now();
+
     const img = create("img");
     const url = Figa.loadAsset("icons/figa-icon.png");
 
@@ -31,9 +34,10 @@ export default class Home extends FigaScreen {
 
     extend(box, img);
     extend(box2, new ReactiveButton());
-    extend(box2, new Link("About ✨", "/about"));
     extend(box, box2);
+    extend(box2, new Link("About ✨", "/about"));
     extend(box, p);
+    extend(box, new ReenderStat(start));
 
     return {
       element: box,
@@ -44,7 +48,6 @@ export default class Home extends FigaScreen {
     // handle router navigation
     // example if user is not login navigate to "/login" page (protect the route)
     // if (!login) navigate("/login");
-
     // Refresh Screen all components are rerendered! ⌛
     this.refresh();
   }

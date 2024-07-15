@@ -4,7 +4,7 @@ import { RouterOptions } from "../Router";
 export default abstract class FigaScreen extends FigaComponent {
   public rendered(): void {}
 
-  public animation(): RouterOptions | null {
+  public routerTransition(): RouterOptions | null {
     return null;
   }
 

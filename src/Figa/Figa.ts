@@ -4,9 +4,13 @@ import { RoutesMap } from "./Types/RoutesMap";
 import { Nullable } from "./Types/Nullable";
 import Router, { RouterOptions } from "./Router";
 
-export const removeChildren = (el: HTMLElement | FigaComponent) => {
+export const removeChildren = (
+  el: HTMLElement | FigaComponent | DocumentFragment
+) => {
   if (el instanceof FigaComponent) el = el.gui;
-  el.childNodes.forEach((n) => n.remove());
+  el.childNodes.forEach((n) => {
+    n.remove();
+  });
 };
 
 export const create = <K extends keyof HTMLElementTagNameMap>(
@@ -16,13 +20,21 @@ export const create = <K extends keyof HTMLElementTagNameMap>(
 };
 
 export const extend = (
-  target: HTMLElement | FigaComponent,
-  component: FigaComponent | HTMLElement
-) => {
-  if (target instanceof FigaComponent) target = target.gui;
+  target: HTMLElement | FigaComponent | DocumentFragment,
+  component: HTMLElement | FigaComponent | DocumentFragment
+): void => {
+  if (target instanceof FigaComponent) target = target.gui as HTMLElement;
+
+  console.log(target, target.nodeType === Node.DOCUMENT_FRAGMENT_NODE);
 
   if (component instanceof FigaComponent) component = component.gui;
 
+  if (component.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+    component.childNodes.forEach((node) => {
+      extend(target, node as HTMLElement);
+    });
+    return;
+  }
   target.appendChild(component);
 };
 
@@ -55,7 +67,7 @@ export default class Figa {
     routes: RoutesMap = new Map(),
     options: RouterOptions = {
       animation: "slide-left",
-      transition: 400,
+      duration: 400,
     }
   ): void {
     if (this.router) {
@@ -66,7 +78,7 @@ export default class Figa {
     Figa._root = root;
     Figa.router = new Router(routes, root, options);
 
-    const { transition } = Figa.router.options;
+    const { duration: transition } = Figa.router.options;
 
     setTimeout(() => Figa.router!.navigate("/"), transition);
   }

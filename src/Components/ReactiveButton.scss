@@ -1,8 +1,13 @@
 .reactive-button {
   border-radius: 10px;
+  transition: 0.2s;
   cursor: pointer;
   padding: 15px;
   border: none;
+
+  &:hover {
+    background-color: #bcdbf0;
+  }
 
   span {
     color: #f00;

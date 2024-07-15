@@ -9,7 +9,7 @@ import Warning from "./Build in/UI/Warning";
 
 export interface RouterOptions {
   animation: RouterAnimation;
-  transition: number;
+  duration: number;
 }
 
 export default class Router {
@@ -20,7 +20,7 @@ export default class Router {
     private _allowSameOrigin: boolean = true,
     private currentRoute = ""
   ) {
-    const { transition } = _options;
+    const { duration: transition } = _options;
 
     this.updateTransition(transition);
   }
@@ -30,14 +30,14 @@ export default class Router {
   }
 
   public navigate(path: string): void {
-    let { animation, transition } = this._options;
+    let { animation, duration: transition } = this._options;
 
     const route = this._routes.get(path) as FigaScreen;
-    const routeAnim = route?.animation();
+    const routeAnim = route?.routerTransition();
 
     if (routeAnim) {
       this.updateTransition(transition);
-      transition = routeAnim.transition;
+      transition = routeAnim.duration;
       animation = routeAnim.animation;
     }
 
@@ -57,13 +57,14 @@ export default class Router {
         return;
       }
 
+      console.log("route", route);
       extend(this._target, route);
       this.currentRoute = path;
       route.rendered();
     };
 
     let t = this._target;
-    if (t instanceof FigaComponent) t = t.gui;
+    if (t instanceof FigaComponent) t = t.gui as HTMLElement;
 
     setTimeout(() => {
       changeRoute();
@@ -133,7 +134,7 @@ export default class Router {
   private updateTransition(transition: number) {
     let t = this._target;
 
-    t = t instanceof FigaComponent ? t.gui : t;
+    t = t instanceof FigaComponent ? (t.gui as HTMLElement) : t;
     t.style.transition = `${transition}ms`;
   }
 

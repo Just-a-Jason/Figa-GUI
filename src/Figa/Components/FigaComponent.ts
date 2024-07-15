@@ -1,5 +1,6 @@
 import FigaComponentProps from "./Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "./FigaUITemplate";
+import { extend } from "../Figa";
 
 export default abstract class FigaComponent<
   Props extends FigaComponentProps = FigaComponentProps
@@ -19,9 +20,8 @@ export default abstract class FigaComponent<
     return this.body.element.querySelector(q);
   }
 
-  public append(child: HTMLElement | FigaComponent): void {
-    if (child instanceof FigaComponent) this.body.element.append(child.gui);
-    else this.body.element.append(child);
+  public append(child: HTMLElement | FigaComponent | DocumentFragment): void {
+    extend(this.body.element, child);
   }
 
   public remove(): void {
@@ -38,7 +38,7 @@ export default abstract class FigaComponent<
     (this.body.element as HTMLElement).remove();
   }
 
-  public get gui(): HTMLElement {
+  public get gui(): HTMLElement | DocumentFragment {
     if (this.body.element instanceof FigaComponent)
       return this.body.element.gui;
 

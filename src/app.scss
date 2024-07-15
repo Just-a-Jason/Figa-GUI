@@ -22,3 +22,16 @@ body {
   height: 100%;
   width: 100%;
 }
+
+a {
+  text-decoration: none;
+  background-color: #4472d4;
+  transition: 0.2s;
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+  width: fit-content;
+  &:hover {
+    background-color: #90a7da;
+  }
+}
