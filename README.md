@@ -8,6 +8,10 @@
 
 With build in router! Package size: ~20 KB ✨
 
+### GUI 🖼️:
+
+![figa](https://github.com/user-attachments/assets/43c0d89f-c620-4cbd-a59f-9c2dfa2f7e09)
+
 ### Example UI component 🧩:
 
 ```ts
@@ -109,4 +113,23 @@ export const routes: RoutesMap = new Map([
   ["/about", new About()],
   ["/", new Home()],
 ]);
+```
+
+### App initialization (main.ts) 🫧💾:
+
+```ts
+import Figa, { find } from "./Figa/Figa";
+import { routes } from "./config";
+
+// Main figa app entry 🍇
+const main = () => {
+  const root = find("#app") as HTMLElement;
+
+  Figa.initRouter(root, routes, {
+    animation: "fade",
+    transition: 400,
+  });
+};
+
+document.addEventListener("DOMContentLoaded", main);
 ```
