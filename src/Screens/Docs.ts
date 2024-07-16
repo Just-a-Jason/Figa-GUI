@@ -34,7 +34,6 @@ export default class Docs extends FigaScreen {
 
             extend(ul2, li2);
           });
-          console.log(doc);
 
           extend(li, ul2);
           extend(ul, li);

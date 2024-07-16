@@ -133,7 +133,7 @@ export const listen = (
   call: (e: Event) => void
 ) => el.addEventListener(ev, call);
 
-export const rective = <T>(value: T) => new Reactive(value);
+export const reactive = <T>(value: T) => new Reactive(value);
 
 /**
  *

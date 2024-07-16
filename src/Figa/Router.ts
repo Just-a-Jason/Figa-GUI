@@ -13,12 +13,13 @@ export interface RouterOptions {
 }
 
 export default class Router {
+  private _context: Record<string, any> = {};
+  private currentRoute = "";
+
   constructor(
-    private _routes: RoutesMap = new Map(),
-    private _target: FigaComponent | HTMLElement,
-    private _options: RouterOptions,
-    private _allowSameOrigin: boolean = true,
-    private currentRoute = ""
+    private routes: RoutesMap = new Map(),
+    private target: FigaComponent | HTMLElement,
+    private _options: RouterOptions
   ) {
     const { duration: transition } = _options;
 
@@ -26,13 +27,16 @@ export default class Router {
   }
 
   public register(route: string, component: FigaScreen): void {
-    this._routes.set(route, component);
+    this.routes.set(route, component);
   }
 
-  public navigate(path: string): void {
+  public navigate(path: string, context: Record<string, any> = {}): void {
+    this._context = context;
+
     let { animation, duration: transition } = this._options;
 
-    const route = this._routes.get(path) as FigaScreen;
+    const match = this.matchRoute(path);
+    const route = this.routes.get(match as string);
     const routeAnim = route?.routerTransition();
 
     if (routeAnim) {
@@ -42,27 +46,25 @@ export default class Router {
     }
 
     const changeRoute = () => {
-      removeChildren(this._target);
+      removeChildren(this.target);
 
       path = path.trim();
-
-      if (!this._allowSameOrigin && this.currentRoute === path) return;
 
       if (!route) {
         const warning = `Route: "${path}" does not exists! Use router.register(string, FigaScreen) to add new route.`;
 
-        extend(this._target, new Warning(warning));
+        extend(this.target, new Warning(warning));
         this.currentRoute = path;
         console.warn(warning);
         return;
       }
 
-      extend(this._target, route);
+      extend(this.target, route);
       this.currentRoute = path;
       route.rendered();
     };
 
-    let t = this._target;
+    let t = this.target;
     if (t instanceof FigaComponent) t = t.gui as HTMLElement;
 
     setTimeout(() => {
@@ -131,7 +133,7 @@ export default class Router {
   }
 
   private updateTransition(transition: number) {
-    let t = this._target;
+    let t = this.target;
 
     t = t instanceof FigaComponent ? (t.gui as HTMLElement) : t;
     t.style.transition = `${transition}ms`;
@@ -141,8 +143,20 @@ export default class Router {
     return this.currentRoute;
   }
 
+  public get context(): Record<string, any> {
+    return this._context;
+  }
+
   public get options(): RouterOptions {
     return this._options;
+  }
+
+  public matchRoute(route: string): string | undefined {
+    for (const ref of this.routes.keys()) {
+      if (validate(ref, route)) return ref;
+    }
+
+    return undefined;
   }
 }
 
@@ -167,28 +181,52 @@ export class Link extends FigaComponent {
 export const navigate = (path: string) => Figa.router?.navigate(path);
 export const route = (): string => Figa.router?.current as string;
 
-export const params = (ref: string, url: string): object | null => {
-  const isParam = (route: string) =>
-    route.indexOf("{") > -1 && route.indexOf("}");
+const isParam = (route: string) =>
+  route.indexOf("{") > -1 && route.indexOf("}");
 
-  const params: { [index: string]: any } = {};
+const validate = (ref: string | string[], url: string | string[]): boolean => {
+  if (typeof ref === "string") ref = ref.trim().split("/");
+  if (typeof url === "string") url = url.trim().split("/");
 
-  const validate = (ref: string[], url: string[]) => {
-    if (ref.length !== url.length) return false;
+  if (ref.length !== url.length) return false;
 
-    for (let i = 0; i < ref.length; i++) {
-      if (isParam(ref[i])) {
-        let param = ref[i].trim();
-        param = param.slice(1, param.length - 1);
+  for (let i = 0; i < ref.length; i++) {
+    if (isParam(ref[i].trim())) continue;
+    if (ref[i] !== url[i]) return false;
+  }
+  return true;
+};
+
+const parseParams = (url: string | string[]): Record<string, any> => {
+  const params: Record<string, any> = {};
+
+  if (typeof url === "string") {
+    let ref: undefined | string | string[] = Figa.router?.matchRoute(url);
+    if (!ref) return params;
+
+    ref = ref.trim().split("/");
+
+    if (!validate(ref, url)) return params;
+    url = url.trim().split("/");
+
+    ref.forEach((param, i) => {
+      if (!isParam(param)) return;
+
+      const parsed = parseFloat(url[i]);
+
+      param = param.slice(1, param.length - 1);
+
+      if (Number.isNaN(parsed)) {
         params[param] = url[i];
-        continue;
+        return;
       }
-      if (ref[i] !== url[i]) return false;
-    }
-    return true;
-  };
+      params[param] = parsed;
+    });
+  }
 
-  if (validate(ref.trim().split("/"), url.trim().split("/"))) return params;
+  return params;
+};
 
-  return null;
+export const routeParams = () => {
+  return parseParams(route());
 };
