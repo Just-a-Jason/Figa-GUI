@@ -25,8 +25,6 @@ export const extend = (
 ): void => {
   if (target instanceof FigaComponent) target = target.gui as HTMLElement;
 
-  console.log(target, target.nodeType === Node.DOCUMENT_FRAGMENT_NODE);
-
   if (component instanceof FigaComponent) component = component.gui;
 
   if (component.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {

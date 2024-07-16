@@ -23,15 +23,19 @@ body {
   width: 100%;
 }
 
-a {
-  text-decoration: none;
-  background-color: #4472d4;
-  transition: 0.2s;
-  border-radius: 10px;
-  padding: 10px;
-  color: #fff;
-  width: fit-content;
-  &:hover {
-    background-color: #90a7da;
+.figa-content,
+.about {
+  a {
+    background-color: #4472d4;
+    text-decoration: none;
+    border-radius: 10px;
+    width: fit-content;
+    transition: 0.2s;
+    padding: 10px;
+    color: #fff;
+
+    &:hover {
+      background-color: #90a7da;
+    }
   }
 }

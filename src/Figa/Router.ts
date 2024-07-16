@@ -57,7 +57,6 @@ export default class Router {
         return;
       }
 
-      console.log("route", route);
       extend(this._target, route);
       this.currentRoute = path;
       route.rendered();
@@ -167,3 +166,29 @@ export class Link extends FigaComponent {
 
 export const navigate = (path: string) => Figa.router?.navigate(path);
 export const route = (): string => Figa.router?.current as string;
+
+export const params = (ref: string, url: string): object | null => {
+  const isParam = (route: string) =>
+    route.indexOf("{") > -1 && route.indexOf("}");
+
+  const params: { [index: string]: any } = {};
+
+  const validate = (ref: string[], url: string[]) => {
+    if (ref.length !== url.length) return false;
+
+    for (let i = 0; i < ref.length; i++) {
+      if (isParam(ref[i])) {
+        let param = ref[i].trim();
+        param = param.slice(1, param.length - 1);
+        params[param] = url[i];
+        continue;
+      }
+      if (ref[i] !== url[i]) return false;
+    }
+    return true;
+  };
+
+  if (validate(ref.trim().split("/"), url.trim().split("/"))) return params;
+
+  return null;
+};

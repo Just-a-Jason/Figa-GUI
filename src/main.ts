@@ -6,7 +6,7 @@ const main = () => {
   const root = find("#app") as HTMLElement;
 
   Figa.initRouter(root, routes, {
-    animation: "slide-right",
+    animation: "slide-up",
     duration: 400,
   });
 };

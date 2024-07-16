@@ -1,8 +1,9 @@
+import FigaScreen from "./Figa/Components/FigaScreen";
 import { RoutesMap } from "./Figa/Types/RoutesMap";
+import About from "./Screens/About";
 import Home from "./Screens/Home";
 import Figa from "./Figa/Figa";
-import About from "./Screens/About";
-import FigaScreen from "./Figa/Components/FigaScreen";
+import Docs from "./Screens/Docs";
 
 Figa.config({
   staticPath: "/src/assets",
@@ -11,4 +12,5 @@ Figa.config({
 export const routes: RoutesMap = new Map([
   ["/", new Home()],
   ["/about", new About() as FigaScreen],
+  ["/docs", new Docs()],
 ]);

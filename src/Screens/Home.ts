@@ -3,9 +3,9 @@ import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
 import Figa, { create, cssClass, extend } from "../Figa/Figa";
 import ReactiveButton from "../Components/ReactiveButton";
 import FigaScreen from "../Figa/Components/FigaScreen";
+import ReenderStat from "../Components/RenderStat";
 import { Link } from "../Figa/Router";
 import "./Home.scss";
-import ReenderStat from "../Components/RenderStat";
 
 export default class Home extends FigaScreen {
   public constructor() {
