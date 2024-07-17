@@ -15,18 +15,19 @@ With build in router! Package size: ~20 KB ✨
 ### Example UI component 🧩:
 
 ```ts
-import FigaComponentProps from "../Figa/Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
-import { create, cssClass, listen, rective } from "../Figa/Figa";
+import { create, cssClass, listen, reactive } from "../Figa/Figa";
 import FigaComponent from "../Figa/Components/FigaComponent";
+import "./ReactiveButton.scss";
 
 export default class ReactiveButton extends FigaComponent {
   protected template(): FigaUITemplate<FigaComponentProps> {
-    const state = rective(0);
+    const state = reactive(0);
 
     const btn = create("button");
 
-    state.onValueChanged(
+    state.changed(
       (v) => (btn.innerHTML = `You ate <span>${v}</span> cookies! 🍪`)
     );
 
@@ -43,13 +44,13 @@ export default class ReactiveButton extends FigaComponent {
 ### Example page component 🧩:
 
 ```ts
-import FigaComponentProps from "../Figa/Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
-import Figa, { create, cssClass, extend } from "../Figa/Figa";
+import { boxify, create, cssClass, img } from "../Figa/Figa";
 import ReactiveButton from "../Components/ReactiveButton";
 import FigaScreen from "../Figa/Components/FigaScreen";
+import ReenderStat from "../Components/RenderStat";
 import { Link } from "../Figa/Router";
-import "./Home.scss";
 
 export default class Home extends FigaScreen {
   public constructor() {
@@ -57,40 +58,37 @@ export default class Home extends FigaScreen {
   }
 
   protected template(): FigaUITemplate<FigaComponentProps> {
-    const img = create("img");
-    const url = Figa.loadAsset("icons/figa-icon.png");
+    const start = performance.now();
 
-    img.draggable = false;
-    img.src = url;
-
-    const box = create("div");
-    const box2 = create("div");
-
-    cssClass(box, "figa-content");
-    cssClass(box2, "wrapper");
+    const i = img("assets/icons/figa-icon.png");
 
     const p = create("p");
 
     p.innerHTML = "Edit: <span>src/Screens/Home.ts</span> to modify the page!";
     cssClass(p, "figa-modify");
 
-    extend(box, img);
-    extend(box2, new ReactiveButton());
-    extend(box2, new Link("About ✨", "/about"));
-    extend(box, box2);
-    extend(box, p);
-
     return {
-      element: box,
+      element: boxify(
+        [
+          i,
+          boxify(
+            [new ReactiveButton(), new Link("About ✨", "/about")],
+            "wrapper"
+          ),
+          p,
+          new ReenderStat(start),
+        ],
+        "figa-content"
+      ),
     };
   }
 
   public override rendered(): void {
-    // Handle router navigation
-    // For example, if the user is not logged in, navigate to the "/login" page (protect the route)
-    // navigate('/login')
+    // handle router navigation
+    // example if user is not login navigate to "/login" page (protect the route)
+    // if (!login) navigate("/login");
+    // Refresh Screen all components are rerendered! ⌛
 
-    // Reload all components on current page! ⌛
     this.refresh();
   }
 }
@@ -99,18 +97,18 @@ export default class Home extends FigaScreen {
 ### Route management (config.ts) 🫚:
 
 ```ts
-import { RoutesMap } from "./Figa/Types/RoutesMap";
 import FigaScreen from "./Figa/Components/FigaScreen";
+import { RoutesMap } from "./Figa/Types/RoutesMap";
 import About from "./Screens/About";
 import Home from "./Screens/Home";
 import Figa from "./Figa/Figa";
 
 Figa.config({
-  staticPath: "/src/assets",
+  staticPath: "",
 });
 
 export const routes: RoutesMap = new Map([
-  ["/about", new About()],
+  ["/about", new About() as FigaScreen],
   ["/", new Home()],
 ]);
 ```
@@ -126,8 +124,8 @@ const main = () => {
   const root = find("#app") as HTMLElement;
 
   Figa.initRouter(root, routes, {
-    animation: "fade",
-    transition: 400,
+    animation: "slide-up",
+    duration: 400,
   });
 };
 
