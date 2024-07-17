@@ -19,7 +19,6 @@ import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentP
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
 import { create, cssClass, listen, reactive } from "../Figa/Figa";
 import FigaComponent from "../Figa/Components/FigaComponent";
-import "./ReactiveButton.scss";
 
 export default class ReactiveButton extends FigaComponent {
   protected template(): FigaUITemplate<FigaComponentProps> {
