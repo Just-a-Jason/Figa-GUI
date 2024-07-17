@@ -1,4 +1,4 @@
-import FigaComponentProps from "../Figa/Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
 import { create, cssClass, listen, reactive } from "../Figa/Figa";
 import FigaComponent from "../Figa/Components/FigaComponent";
@@ -10,7 +10,7 @@ export default class ReactiveButton extends FigaComponent {
 
     const btn = create("button");
 
-    state.onValueChanged(
+    state.changed(
       (v) => (btn.innerHTML = `You ate <span>${v}</span> cookies! 🍪`)
     );
 

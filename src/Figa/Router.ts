@@ -1,4 +1,4 @@
-import FigaComponentProps from "./Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "./Components/Interfaces/FigaComponentProps";
 import Figa, { create, extend, removeChildren } from "../Figa/Figa";
 import { FigaUITemplate } from "./Components/FigaUITemplate";
 import { RouterAnimation } from "./Types/RouterAnimation";
@@ -14,6 +14,7 @@ export interface RouterOptions {
 
 export default class Router {
   private _context: Record<string, any> = {};
+  private history: string[] = [];
   private currentRoute = "";
 
   constructor(
@@ -24,6 +25,11 @@ export default class Router {
     const { duration: transition } = _options;
 
     this.updateTransition(transition);
+  }
+
+  public pushHistory(path: string) {
+    if (this.history.length < 200) this.history.push(path);
+    else this.history[this.history.length - 1] = path;
   }
 
   public register(route: string, component: FigaScreen): void {
@@ -59,8 +65,9 @@ export default class Router {
         return;
       }
 
-      extend(this.target, route);
       this.currentRoute = path;
+
+      extend(this.target, route);
       route.rendered();
     };
 
@@ -166,9 +173,11 @@ export class Link extends FigaComponent {
 
     (this.body.element as HTMLAnchorElement).href = to;
     (this.body.element as HTMLElement).textContent = text;
+    (this.body.element as HTMLElement).title = to;
 
     (this.body.element as HTMLAnchorElement).addEventListener("click", (e) => {
       e.preventDefault();
+      Figa.router?.pushHistory(to);
       navigate(to);
     });
   }
@@ -209,19 +218,22 @@ const parseParams = (url: string | string[]): Record<string, any> => {
     if (!validate(ref, url)) return params;
     url = url.trim().split("/");
 
-    ref.forEach((param, i) => {
-      if (!isParam(param)) return;
+    for (let i = 0; i < ref.length; i++) {
+      let param = ref[i];
 
-      const parsed = parseFloat(url[i]);
+      if (!isParam(param)) continue;
 
       param = param.slice(1, param.length - 1);
 
+      const parsed = parseFloat(url[i]);
+
       if (Number.isNaN(parsed)) {
         params[param] = url[i];
-        return;
+        continue;
       }
+
       params[param] = parsed;
-    });
+    }
   }
 
   return params;

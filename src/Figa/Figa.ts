@@ -76,9 +76,9 @@ export default class Figa {
     Figa._root = root;
     Figa.router = new Router(routes, root, options);
 
-    const { duration: transition } = Figa.router.options;
+    const { duration } = Figa.router.options;
 
-    setTimeout(() => Figa.router!.navigate("/"), transition);
+    setTimeout(() => Figa.router!.navigate("/"), duration);
   }
 
   public static render(component: FigaComponent) {
@@ -111,7 +111,7 @@ export default class Figa {
 }
 
 class Reactive<T> {
-  private callBacks: ((current?: T, last?: T) => void)[] = [];
+  private callback: (current?: T, last?: T) => void = () => {};
 
   public constructor(public val: T, public prev: T = val) {}
 
@@ -119,11 +119,11 @@ class Reactive<T> {
     this.prev = this.val;
     this.val = value;
 
-    this.callBacks.forEach((call) => call(this.val, this.prev));
+    this.callback(this.val, this.prev);
   }
 
-  public onValueChanged(callback: (current?: T, last?: T) => void) {
-    this.callBacks.push(callback);
+  public changed(callback: (current?: T, last?: T) => void) {
+    this.callback = callback;
   }
 }
 
@@ -147,4 +147,29 @@ export const cssClass = (el: HTMLElement, cls: string[] | string): void => {
   }
 
   cls.forEach((cl) => el.classList.add(cl));
+};
+
+export const boxify = (
+  elements: (FigaComponent | HTMLElement | DocumentFragment)[],
+  cls?: string[] | string
+): HTMLDivElement => {
+  const div = create("div");
+
+  elements.forEach((el) => {
+    if (el instanceof FigaComponent) el = el.gui;
+    div.appendChild(el);
+  });
+
+  if (cls) cssClass(div, cls);
+  return div;
+};
+
+export const img = (src: string, alt?: string): HTMLImageElement => {
+  const img = create("img");
+  img.src = Figa.loadAsset(src);
+  img.draggable = false;
+
+  if (alt) img.alt = alt;
+
+  return img;
 };

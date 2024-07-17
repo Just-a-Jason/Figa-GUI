@@ -1,3 +1,1 @@
-export default interface FigaComponentProps {
-  [key: string]: HTMLElement | DocumentFragment;
-}
+export type FigaComponentProps = Record<string, HTMLElement | DocumentFragment>;

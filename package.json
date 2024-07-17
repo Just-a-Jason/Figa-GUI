@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && cpx src/assets/**/* dist/assets",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1",
+    "cpx": "^1.5.0",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
   }

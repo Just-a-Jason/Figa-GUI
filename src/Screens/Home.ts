@@ -1,6 +1,6 @@
-import FigaComponentProps from "../Figa/Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
-import Figa, { create, cssClass, extend } from "../Figa/Figa";
+import { create, cssClass, extend, img } from "../Figa/Figa";
 import ReactiveButton from "../Components/ReactiveButton";
 import FigaScreen from "../Figa/Components/FigaScreen";
 import ReenderStat from "../Components/RenderStat";
@@ -15,11 +15,9 @@ export default class Home extends FigaScreen {
   protected template(): FigaUITemplate<FigaComponentProps> {
     const start = performance.now();
 
-    const img = create("img");
-    const url = Figa.loadAsset("icons/figa-icon.png");
+    const i = img("assets/icons/figa-icon.png");
 
-    img.src = url;
-    img.draggable = false;
+    i.draggable = false;
 
     const box = create("div");
     const box2 = create("div");
@@ -32,7 +30,7 @@ export default class Home extends FigaScreen {
     p.innerHTML = "Edit: <span>src/Screens/Home.ts</span> to modify the page!";
     cssClass(p, "figa-modify");
 
-    extend(box, img);
+    extend(box, i);
     extend(box2, new ReactiveButton());
     extend(box, box2);
     extend(box2, new Link("About ✨", "/about"));
