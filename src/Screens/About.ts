@@ -1,4 +1,4 @@
-import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../Figa/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
 import { boxify, create, extend, img } from "../Figa/Figa";
 import FigaScreen from "../Figa/Components/FigaScreen";

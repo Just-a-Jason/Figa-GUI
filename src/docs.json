@@ -1,9 +1,0 @@
-
-[
-    {
-        "name":"Router 🛣️", 
-        "functions": [
-           { "name": "navigate(path:string)", "desc": "Tells router where to go."}
-        ]
-    }
-]

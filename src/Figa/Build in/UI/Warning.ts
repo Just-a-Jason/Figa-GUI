@@ -1,4 +1,4 @@
-import { FigaComponentProps } from "../../Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../../Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../../Components/FigaUITemplate";
 import FigaComponent from "../../Components/FigaComponent";
 import { create, cssClass, extend } from "../../Figa";

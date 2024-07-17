@@ -1,4 +1,4 @@
-import { FigaComponentProps } from "../Figa/Components/Interfaces/FigaComponentProps";
+import { FigaComponentProps } from "../Figa/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
 import { boxify, create, cssClass, img } from "../Figa/Figa";
 import ReactiveButton from "../Components/ReactiveButton";
@@ -43,7 +43,6 @@ export default class Home extends FigaScreen {
     // example if user is not login navigate to "/login" page (protect the route)
     // if (!login) navigate("/login");
     // Refresh Screen all components are rerendered! ⌛
-
-    this.refresh();
+    // this.refresh();
   }
 }

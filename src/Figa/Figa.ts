@@ -1,8 +1,8 @@
 import FigaComponent from "./Components/FigaComponent";
+import Router, { RouterOptions } from "./Router";
 import FigaConfig from "./Interfaces/FigaConfig";
 import { RoutesMap } from "./Types/RoutesMap";
 import { Nullable } from "./Types/Nullable";
-import Router, { RouterOptions } from "./Router";
 
 export const removeChildren = (
   el: HTMLElement | FigaComponent | DocumentFragment
@@ -62,7 +62,7 @@ export default class Figa {
 
   public static initRouter(
     root: HTMLElement,
-    routes: RoutesMap = new Map(),
+    routes: RoutesMap,
     options: RouterOptions = {
       animation: "slide-left",
       duration: 400,
