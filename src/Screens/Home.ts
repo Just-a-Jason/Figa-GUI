@@ -1,11 +1,9 @@
 import { FigaComponentProps } from "../Figa/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
-import ReactiveButton from "../Components/ReactiveButton";
 import FigaScreen from "../Figa/Components/FigaScreen";
-import { boxify, img, textNode } from "../Figa/Figa";
-import RenderStat from "../Components/RenderStat";
-import { Link } from "../Figa/Router";
+import { boxify, textNode, extend, img } from "../Figa/Figa";
 import "./Home.scss";
+import { Link } from "../Figa/Router";
 
 export default class Home extends FigaScreen {
   public constructor() {
@@ -13,22 +11,37 @@ export default class Home extends FigaScreen {
   }
 
   protected template(): FigaUITemplate<FigaComponentProps> {
-    const start = performance.now();
-
     return {
       element: boxify(
         [
-          img("assets/icons/figa-icon.png"),
           boxify(
-            [new ReactiveButton(), new Link("About ✨", "/about")],
-            "wrapper"
+            [
+              extend(
+                textNode("h1", { content: "Welcome to figa app!" }),
+                img("assets/icons/figa-icon.png")
+              ),
+            ],
+            "box"
           ),
-          textNode("p", {
-            innerHtml:
-              "Edit: <span>src/Screens/Home.ts</span> to modify the page!",
-            cssClasses: "figa-modify",
-          }),
-          new RenderStat(start),
+          boxify(
+            [
+              textNode("p", { content: "Choose your type of app! ✨" }),
+              boxify(
+                [
+                  extend(
+                    new Link("Tauri App", "/create/tauri"),
+                    img("assets/icons/npm.svg")
+                  ),
+                  extend(
+                    new Link("Website", "/create/website"),
+                    img("assets/icons/npm.svg")
+                  ),
+                ],
+                "buttons"
+              ),
+            ],
+            "box"
+          ),
         ],
         "figa-content"
       ),

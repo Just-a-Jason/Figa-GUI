@@ -48,6 +48,8 @@ export default class Router {
 
   public navigate(path: string, context: Record<string, any> = {}): void {
     this.currentRoute = path;
+    window.history.replaceState({}, "", window.location.origin + path);
+    console.log(window.location.href);
     this._context = context;
 
     let { animation, duration: transition } = this._options;

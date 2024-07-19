@@ -22,20 +22,3 @@ body {
   height: 100%;
   width: 100%;
 }
-
-.figa-content,
-.about {
-  a {
-    background-color: #4472d4;
-    text-decoration: none;
-    border-radius: 10px;
-    width: fit-content;
-    transition: 0.2s;
-    padding: 10px;
-    color: #fff;
-
-    &:hover {
-      background-color: #90a7da;
-    }
-  }
-}

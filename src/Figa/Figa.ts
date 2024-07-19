@@ -4,6 +4,7 @@ import FigaConfig from "./Interfaces/FigaConfig";
 import { RoutesMap } from "./Types/RoutesMap";
 import { Nullable } from "./Types/Nullable";
 import { HtmlTextNode, HtmlTextNodeProps } from "./Types/HtmlTextNode";
+import { HtmlInputNodeProps, InputNodeType } from "./Types/HtmlInputNodeProps";
 
 export const removeChildren = (
   el: HTMLElement | FigaComponent | DocumentFragment
@@ -23,7 +24,7 @@ export const create = <K extends keyof HTMLElementTagNameMap>(
 export const extend = (
   target: HTMLElement | FigaComponent | DocumentFragment,
   component: HTMLElement | FigaComponent | DocumentFragment
-): void => {
+) => {
   if (target instanceof FigaComponent) target = target.gui as HTMLElement;
 
   if (component instanceof FigaComponent) component = component.gui;
@@ -32,9 +33,10 @@ export const extend = (
     component.childNodes.forEach((node) => {
       extend(target, node as HTMLElement);
     });
-    return;
+    return target;
   }
   target.appendChild(component);
+  return target;
 };
 
 export const find = (query: string, all: boolean = false) =>
@@ -179,15 +181,31 @@ export const textNode = <K extends HtmlTextNode>(
   type: K,
   props: HtmlTextNodeProps
 ): HTMLElementTagNameMap[K] => {
-  const element = create(type);
+  const el = create(type);
 
-  if (props.content) element.textContent = props.content;
-  if (props.innerHtml) element.innerHTML = props.innerHtml;
+  if (props.content) el.textContent = props.content;
+  if (props.innerHtml) el.innerHTML = props.innerHtml;
   if (props.cssClasses) {
     if (typeof props.cssClasses === "string")
-      element.classList.add(props.cssClasses);
-    else props.cssClasses.forEach((css) => element.classList.add(css));
+      el.classList.add(props.cssClasses);
+    else props.cssClasses.forEach((css) => el.classList.add(css));
   }
 
-  return element;
+  return el;
+};
+
+export const inputNode = <K extends InputNodeType>(
+  type: K,
+  props: HtmlInputNodeProps
+): HTMLInputElement => {
+  const el = create("input");
+
+  if (props.onChange) el.addEventListener("change", props.onChange);
+  if (props.placeHolder) el.placeholder = props.placeHolder;
+  if (props.value) el.value = props.value;
+  if (props.name) el.name = props.name;
+  if (props.id) el.id = props.id;
+  el.type = type;
+
+  return el;
 };
