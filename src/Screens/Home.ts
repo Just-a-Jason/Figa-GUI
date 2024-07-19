@@ -1,9 +1,9 @@
 import { FigaComponentProps } from "../Figa/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
-import { boxify, create, cssClass, img } from "../Figa/Figa";
 import ReactiveButton from "../Components/ReactiveButton";
 import FigaScreen from "../Figa/Components/FigaScreen";
-import ReenderStat from "../Components/RenderStat";
+import { boxify, img, textNode } from "../Figa/Figa";
+import RenderStat from "../Components/RenderStat";
 import { Link } from "../Figa/Router";
 import "./Home.scss";
 
@@ -15,23 +15,20 @@ export default class Home extends FigaScreen {
   protected template(): FigaUITemplate<FigaComponentProps> {
     const start = performance.now();
 
-    const i = img("assets/icons/figa-icon.png");
-
-    const p = create("p");
-
-    p.innerHTML = "Edit: <span>src/Screens/Home.ts</span> to modify the page!";
-    cssClass(p, "figa-modify");
-
     return {
       element: boxify(
         [
-          i,
+          img("assets/icons/figa-icon.png"),
           boxify(
             [new ReactiveButton(), new Link("About ✨", "/about")],
             "wrapper"
           ),
-          p,
-          new ReenderStat(start),
+          textNode("p", {
+            innerHtml:
+              "Edit: <span>src/Screens/Home.ts</span> to modify the page!",
+            cssClasses: "figa-modify",
+          }),
+          new RenderStat(start),
         ],
         "figa-content"
       ),

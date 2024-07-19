@@ -3,6 +3,7 @@ import Router, { RouterOptions } from "./Router";
 import FigaConfig from "./Interfaces/FigaConfig";
 import { RoutesMap } from "./Types/RoutesMap";
 import { Nullable } from "./Types/Nullable";
+import { HtmlTextNode, HtmlTextNodeProps } from "./Types/HtmlTextNode";
 
 export const removeChildren = (
   el: HTMLElement | FigaComponent | DocumentFragment
@@ -172,4 +173,21 @@ export const img = (src: string, alt?: string): HTMLImageElement => {
   if (alt) img.alt = alt;
 
   return img;
+};
+
+export const textNode = <K extends HtmlTextNode>(
+  type: K,
+  props: HtmlTextNodeProps
+): HTMLElementTagNameMap[K] => {
+  const element = create(type);
+
+  if (props.content) element.textContent = props.content;
+  if (props.innerHtml) element.innerHTML = props.innerHtml;
+  if (props.cssClasses) {
+    if (typeof props.cssClasses === "string")
+      element.classList.add(props.cssClasses);
+    else props.cssClasses.forEach((css) => element.classList.add(css));
+  }
+
+  return element;
 };
