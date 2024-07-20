@@ -215,7 +215,11 @@ export default class Router {
 }
 
 export class Link extends FigaComponent {
-  public constructor(text: string, to: string) {
+  public constructor(
+    text: string,
+    to: string,
+    context: Record<string, any> = {}
+  ) {
     super();
 
     (this.body.element as HTMLAnchorElement).href = to;
@@ -224,7 +228,7 @@ export class Link extends FigaComponent {
 
     (this.body.element as HTMLAnchorElement).addEventListener("click", (e) => {
       e.preventDefault();
-      navigate(to);
+      navigate(to, context);
     });
   }
 
@@ -233,9 +237,9 @@ export class Link extends FigaComponent {
   }
 }
 
-export const navigate = (path: string) => Figa.router?.navigate(path);
+export const navigate = (path: string, context: Record<string, any> = {}) =>
+  Figa.router?.navigate(path, context);
 export const route = (): string => Figa.router?.current as string;
 
-export const routeParams = () => {
-  return Figa.router?.parseUrlParams();
-};
+export const routeParams = () => Figa.router!.parseUrlParams();
+export const routeContext = () => Figa.router!.context;

@@ -6,15 +6,24 @@ import {
   extend,
   img,
   inputNode,
+  reactive,
   textNode,
 } from "../Figa/Figa";
 import FigaScreen from "../Figa/Components/FigaScreen";
-import { Link, routeParams, RouterOptions } from "../Figa/Router";
+import { Link, routeContext, routeParams, RouterOptions } from "../Figa/Router";
 import "./Create.scss";
 
 export default class Create extends FigaScreen {
   protected template(): FigaUITemplate<FigaComponentProps> {
     const { type } = routeParams()!;
+
+    const directory = reactive("");
+    const name = reactive("");
+
+    switch (type) {
+      case "tauri":
+        break;
+    }
 
     return {
       element: boxify(
@@ -28,11 +37,19 @@ export default class Create extends FigaScreen {
           ),
           extend(
             textNode("label", { content: "App name: " }),
-            inputNode("text", { placeHolder: "your app name" })
+            inputNode("text", {
+              placeHolder: "your app name",
+              onChange: (e) =>
+                name.set((e.currentTarget as HTMLInputElement).value),
+            })
           ),
           extend(
             textNode("label", { content: "App directory: " }),
-            inputNode("text", { placeHolder: "your app directory" })
+            inputNode("text", {
+              placeHolder: "your app directory",
+              onChange: (e) =>
+                directory.set((e.currentTarget as HTMLInputElement).value),
+            })
           ),
           cssClass(
             extend(
@@ -47,9 +64,9 @@ export default class Create extends FigaScreen {
     };
   }
 
-  override routerTransition(): RouterOptions | null {
+  public override routerTransition(): RouterOptions | null {
     return {
-      animation: "slide-left",
+      animation: "slide-up",
       duration: 400,
     };
   }
