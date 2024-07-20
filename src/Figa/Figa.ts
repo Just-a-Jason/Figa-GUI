@@ -143,13 +143,21 @@ export const reactive = <T>(value: T) => new Reactive(value);
  * @param el - HtmlElement
  * @param cl - String | string[] of css classe(s)
  */
-export const cssClass = (el: HTMLElement, cls: string[] | string): void => {
+export const cssClass = (
+  el: HTMLElement | FigaComponent | DocumentFragment,
+  cls: string[] | string
+): HTMLElement | FigaComponent | DocumentFragment => {
+  if (el instanceof FigaComponent) el = el.gui;
+
+  if (el.nodeType === Node.DOCUMENT_FRAGMENT_NODE) return el;
+
   if (typeof cls === "string") {
-    el.classList.add(cls);
-    return;
+    (el as HTMLElement).classList.add(cls);
+    return el;
   }
 
-  cls.forEach((cl) => el.classList.add(cl));
+  cls.forEach((cl) => (el as HTMLElement).classList.add(cl));
+  return el;
 };
 
 export const boxify = (
@@ -179,9 +187,11 @@ export const img = (src: string, alt?: string): HTMLImageElement => {
 
 export const textNode = <K extends HtmlTextNode>(
   type: K,
-  props: HtmlTextNodeProps
+  props?: HtmlTextNodeProps
 ): HTMLElementTagNameMap[K] => {
   const el = create(type);
+
+  if (!props) return el;
 
   if (props.content) el.textContent = props.content;
   if (props.innerHtml) el.innerHTML = props.innerHtml;
@@ -196,9 +206,11 @@ export const textNode = <K extends HtmlTextNode>(
 
 export const inputNode = <K extends InputNodeType>(
   type: K,
-  props: HtmlInputNodeProps
+  props?: HtmlInputNodeProps
 ): HTMLInputElement => {
   const el = create("input");
+
+  if (!props) return el;
 
   if (props.onChange) el.addEventListener("change", props.onChange);
   if (props.placeHolder) el.placeholder = props.placeHolder;

@@ -1,0 +1,44 @@
+.create-screen {
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+  height: 100%;
+
+  h1 {
+    margin-bottom: 10px;
+    color: #adadad;
+  }
+
+  a.wrapper {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    background-color: #6091a3;
+    border-radius: 10px;
+  }
+
+  .wrapper {
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+
+    img {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  label {
+    width: 50%;
+    input[type="text"] {
+      border-radius: 10px;
+      padding: 10px;
+      border: none;
+      margin: 10px;
+      width: 100%;
+    }
+  }
+}

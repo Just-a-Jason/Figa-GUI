@@ -10,7 +10,8 @@ export type HtmlTextNode =
   | "span"
   | "b"
   | "i"
-  | "blockquote";
+  | "blockquote"
+  | "label";
 
 export interface HtmlTextNodeProps {
   cssClasses?: string | string[];

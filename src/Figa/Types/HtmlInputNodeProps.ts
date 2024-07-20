@@ -7,7 +7,7 @@ export type InputNodeType =
 
 export interface HtmlInputNodeProps {
   cssClasses?: string | string[];
-  placeHolder: string;
+  placeHolder?: string;
   content?: string;
   value?: string;
   name?: string;

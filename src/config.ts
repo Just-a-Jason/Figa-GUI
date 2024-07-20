@@ -4,10 +4,11 @@ import Figa from "./Figa/Figa";
 import Create from "./Screens/Create";
 
 Figa.config({
-  staticPath: "",
+  staticPath: "src/",
 });
 
 export const routes: RoutesMap = {
   "/create/{type}": Create,
+  "/create/{type}/npm-packages": Create,
   "/": Home,
 };
