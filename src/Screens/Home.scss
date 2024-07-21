@@ -45,13 +45,18 @@
         @extend .flex-center-row;
         gap: 10px;
 
+        box-shadow: 2px 2px 10px #000;
         background-color: #378cc5;
         text-decoration: none;
         border-radius: 4px;
-        padding: 10px;
+        transition: 0.2s;
         font-size: 20px;
-        box-shadow: 2px 2px 10px #000;
+        padding: 10px;
         color: #fff;
+
+        &:hover {
+          filter: opacity(0.7);
+        }
       }
     }
   }

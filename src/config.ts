@@ -5,7 +5,7 @@ import Home from "./Screens/Home";
 import Figa from "./Figa/Figa";
 
 Figa.config({
-  staticPath: "src/",
+  staticPath: "",
 });
 
 export const routes: RoutesMap = {

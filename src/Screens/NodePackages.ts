@@ -1,8 +1,17 @@
+import { Link, routeContext, routeParams, RouterOptions } from "../Figa/Router";
 import { FigaComponentProps } from "../Figa/Interfaces/FigaComponentProps";
 import { FigaUITemplate } from "../Figa/Components/FigaUITemplate";
+import NpmRequirements from "../Components/NpmRequirements";
 import FigaScreen from "../Figa/Components/FigaScreen";
-import { Link, routeContext, routeParams, RouterOptions } from "../Figa/Router";
-import { boxify, textNode } from "../Figa/Figa";
+import {
+  boxify,
+  cssClass,
+  extend,
+  img,
+  inputNode,
+  textNode,
+} from "../Figa/Figa";
+import "./NpmPackages.scss";
 
 export default class NodePackages extends FigaScreen {
   protected template(): FigaUITemplate<FigaComponentProps> {
@@ -10,10 +19,24 @@ export default class NodePackages extends FigaScreen {
     const { type } = routeParams();
 
     return {
-      element: boxify([
-        textNode("p", { content: "Node packages manager" }),
-        new Link("Go back to config page", `/create/${type}`),
-      ]),
+      element: boxify(
+        [
+          cssClass(
+            extend(
+              textNode("p", { content: "NPM requirements" }),
+              img("assets/icons/figa-icon.png")
+            ),
+            "wrapper"
+          ),
+          new NpmRequirements(requirements),
+          extend(
+            textNode("label", { content: "Search packages" }),
+            inputNode("text", { placeHolder: "package name" })
+          ),
+          new Link("Go back to config page", `/create/${type}`),
+        ],
+        "npm-manager"
+      ),
     };
   }
 

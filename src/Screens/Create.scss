@@ -1,3 +1,5 @@
+$radius: 6px;
+
 .create-screen {
   justify-content: center;
   flex-direction: column;
@@ -10,12 +12,27 @@
     color: #adadad;
   }
 
-  a.wrapper {
+  a {
     text-decoration: none;
-    color: #fff;
+    border-radius: $radius;
+    transition: 0.2s;
     padding: 10px;
-    background-color: #6091a3;
-    border-radius: 10px;
+    color: #fff;
+
+    &:hover {
+      filter: opacity(0.7);
+    }
+
+    &.wrapper {
+      background-color: #6091a3;
+    }
+
+    &.back-button {
+      background-color: #9aabb1;
+      align-items: center;
+      display: flex;
+      height: 100%;
+    }
   }
 
   .wrapper {

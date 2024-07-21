@@ -10,7 +10,7 @@ import {
   textNode,
 } from "../Figa/Figa";
 import FigaScreen from "../Figa/Components/FigaScreen";
-import { Link, routeContext, routeParams, RouterOptions } from "../Figa/Router";
+import { Link, routeParams, RouterOptions } from "../Figa/Router";
 import "./Create.scss";
 
 export default class Create extends FigaScreen {
@@ -20,8 +20,26 @@ export default class Create extends FigaScreen {
     const directory = reactive("");
     const name = reactive("");
 
+    let requirements: Record<string, string> = {};
+
     switch (type) {
       case "tauri":
+        requirements = {
+          "@tauri-apps/cli": "^1",
+          cpx: "^1.5.0",
+          typescript: "^5.2.2",
+          vite: "^5.3.1",
+          "@tauri-apps/api": "^1",
+          sass: "^1.77.8",
+        };
+        break;
+      default:
+        requirements = {
+          typescript: "^5.2.2",
+          vite: "^5.3.1",
+          sass: "^1.77.8",
+          cpx: "^1.5.0",
+        };
         break;
     }
 
@@ -51,11 +69,23 @@ export default class Create extends FigaScreen {
                 directory.set((e.currentTarget as HTMLInputElement).value),
             })
           ),
-          cssClass(
-            extend(
-              new Link("Manage node packages", `/create/${type}/npm-packages`),
-              img("assets/icons/npm.svg")
-            ),
+          boxify(
+            [
+              cssClass(new Link("Home page 🏠", "/"), "back-button"),
+              cssClass(
+                extend(
+                  new Link(
+                    "Manage node packages",
+                    `/create/${type}/npm-packages`,
+                    {
+                      requirements: requirements,
+                    }
+                  ),
+                  img("assets/icons/npm.svg")
+                ),
+                "wrapper"
+              ),
+            ],
             "wrapper"
           ),
         ],
