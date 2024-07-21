@@ -10,15 +10,22 @@ import {
   textNode,
 } from "../Figa/Figa";
 import FigaScreen from "../Figa/Components/FigaScreen";
-import { Link, routeParams, RouterOptions } from "../Figa/Router";
+import { Link, routeParams, RouterOptions, routeContext } from "../Figa/Router";
 import "./Create.scss";
 
 export default class Create extends FigaScreen {
   protected template(): FigaUITemplate<FigaComponentProps> {
-    const { type } = routeParams()!;
+    const { type } = routeParams();
 
-    const directory = reactive("");
+    const { config } = routeContext();
+
+    const dir = reactive("");
     const name = reactive("");
+
+    if (config) {
+      name.set(config.name.val);
+      dir.set(config.dir.val);
+    }
 
     let requirements: Record<string, string> = {};
 
@@ -59,6 +66,7 @@ export default class Create extends FigaScreen {
               placeHolder: "your app name",
               onChange: (e) =>
                 name.set((e.currentTarget as HTMLInputElement).value),
+              value: name.val,
             })
           ),
           extend(
@@ -66,7 +74,8 @@ export default class Create extends FigaScreen {
             inputNode("text", {
               placeHolder: "your app directory",
               onChange: (e) =>
-                directory.set((e.currentTarget as HTMLInputElement).value),
+                dir.set((e.currentTarget as HTMLInputElement).value),
+              value: dir.val,
             })
           ),
           boxify(
@@ -79,6 +88,10 @@ export default class Create extends FigaScreen {
                     `/create/${type}/npm-packages`,
                     {
                       requirements: requirements,
+                      config: {
+                        name: name,
+                        dir: dir,
+                      },
                     }
                   ),
                   img("assets/icons/npm.svg")

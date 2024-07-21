@@ -9,18 +9,51 @@ import {
   extend,
   img,
   inputNode,
+  reactive,
   textNode,
 } from "../Figa/Figa";
 import "./NpmPackages.scss";
+import { Nullable } from "../Figa/Types/Nullable";
+import NpmPackageList from "../Components/NpmPackageList";
 
 export default class NodePackages extends FigaScreen {
   protected template(): FigaUITemplate<FigaComponentProps> {
-    const { requirements } = routeContext();
+    const { requirements, config } = routeContext();
     const { type } = routeParams();
+
+    const baseUrl = "https://registry.npmjs.org/-/v1/search?";
+    const npmList = reactive<Nullable<NpmPackageList>>(null);
+
+    const fetchPackages = async (query: string) => {
+      const req = await fetch(baseUrl + `text=${query}`);
+
+      if (req.ok) {
+        if (npmList.val) npmList.val.remove();
+
+        const data = await req.json();
+        const list = new NpmPackageList(data);
+        this.append(list);
+        npmList.set(list);
+      }
+    };
 
     return {
       element: boxify(
         [
+          boxify(
+            [
+              textNode("label", { content: "Search packages" }),
+              inputNode("text", {
+                placeHolder: "package name",
+                onChange: (e) =>
+                  fetchPackages((e.currentTarget as HTMLInputElement).value),
+              }),
+              new Link("Config page", `/create/${type}`, {
+                config: config,
+              }),
+            ],
+            "search-bar"
+          ),
           cssClass(
             extend(
               textNode("p", { content: "NPM requirements" }),
@@ -29,11 +62,6 @@ export default class NodePackages extends FigaScreen {
             "wrapper"
           ),
           new NpmRequirements(requirements),
-          extend(
-            textNode("label", { content: "Search packages" }),
-            inputNode("text", { placeHolder: "package name" })
-          ),
-          new Link("Go back to config page", `/create/${type}`),
         ],
         "npm-manager"
       ),
@@ -42,7 +70,7 @@ export default class NodePackages extends FigaScreen {
 
   public override routerTransition(): RouterOptions | null {
     return {
-      animation: "slide-left",
+      animation: "slide-right",
       duration: 400,
     };
   }

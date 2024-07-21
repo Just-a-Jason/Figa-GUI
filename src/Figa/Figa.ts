@@ -221,3 +221,9 @@ export const inputNode = <K extends InputNodeType>(
 
   return el;
 };
+
+// export const GET = async <T>(
+//   url: string,
+//   options: HtmlRequestOptions<T>
+// ): Promise<HtmlRequest> => {};
+// export const POST = () => {};
